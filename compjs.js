@@ -30,12 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
             attrs = [];
         }
         for (let j = 0; j < elmToSearch.length; j++) {
-            if (elmToSearch[j].getAttribute('style') !== null) {
-                elmToSearch[j].setAttribute('style', elmToSearch[j].getAttribute('style') + define.getAttribute('style').replace(/var\(\s*--([^)]+)\s*\)/g, (match, varName) => {
-                    const attributeValue = elmToSearch[j].getAttribute(varName);
-                    return attributeValue ? attributeValue : match;
-                }).replace('display: none;', ''))
+            let css = elmToSearch[j].getAttribute('style');
+            if (css !== "") {
+                css += ";"
             }
+            elmToSearch[j].setAttribute('style', css + define.getAttribute('style').replace(/var\(\s*--([^)]+)\s*\)/g, (match, varName) => {
+                const attributeValue = elmToSearch[j].getAttribute(varName);
+                return attributeValue ? attributeValue : match;
+            }).replace('display: none;', ''))
+
             let newCodes = codes;
             newCodes = newCodes.replace('{{html}}', elmToSearch[j].innerHTML)
             for (let k = 0; k < attrs.length; k++) {
