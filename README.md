@@ -1,46 +1,69 @@
-# It's CompJS
-This is a small library that can be effective in shortening the size of your html codes by adding it to your projects
-## How?
-Please add this code to the end of your html code first:
+# CompJS
+
+**A Lightweight HTML Component Library for Simplifying Code Structure**
+
+CompJS is a small JavaScript library designed to enhance HTML code organization by introducing a simple and effective way to create and use components.
+
+## Getting Started
+
+To integrate CompJS into your project, add the following script tag at the end of your HTML file:
+
 ```html
-<script src="https://cdn.jsdelivr.net/gh/yesvarg/compjs@main/compjs.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zhmidd/compjs@main/comp.js"></script>
 ```
-Then everything is ready for coding! From now on, you can only use the "define" tag and enter the code you want to use as a component multiple times. For example:
+
+With this setup, you can leverage the power of components to make your HTML code more modular and maintainable.
+
+## Defining Components
+
+Define components using the `<define>` tag. For example:
+
 ```html
 <define name="post" style="--color:var(--color)">
     <h2 style="--color:var(--color)">{{title}}</h2>
     <p>{{about}}</p>
 </define>
 ```
-So far we have set up a component, note that this component is not going to be displayed until we include its tag in the html code. Here we set the name of the component equal to "post" through the "name" attribute. This means that whenever we enter the post tag, the entire code of the component will be displayed to us:
-```html
-<post></post>
-```
-## Variables
-Naturally, when using components, there are parts that may change each time they are mentioned, for example, in the example above, our variable values ​​are "title" and "about" "color" (in the style attribute of the "define" tag). In order to create a post tag with different values ​​for these variables, we must act as follows:
+
+In this example, we've created a component named "post" with placeholders for the `title` and `about` variables.
+
+## Using Components
+
+To use a component, simply include its tag in your HTML code:
+
 ```html
 <post color="red" title="This is CompJS"
       about="You can learn how to work with CompJS by reading this post">
 </post>
 ```
-Also, if we want to set a default value for a variable of the component, it is enough to set it as:
-```html
-{{varName=defualtValue}}
-```
-There are times when we want to insert the html code entered into its tag in a part of a component instead of the variable, for this:
+
+Specify variable values directly in the component tag to customize its content.
+
+## Variables and Default Values
+
+Easily manage variable values within components. Set default values using the `{{varName=defaultValue}}` syntax. For instance:
+
 ```html
 <define name="htmlViewer">
-      {{html}}
+    {{html}}
 </define>
-<htmlViewer msg="hello"><h2>Hello World!</h2><button onclick="alert('{{msg=hi}}')">Click Here</button></htmlViewer>
-It will return a h2 and a button tag that when you click on, it alerts "hello"
+<htmlViewer msg="hello">
+    <h2>Hello World!</h2>
+    <button onclick="alert('{{msg=hi}}')">Click Here</button>
+</htmlViewer>
 ```
-## Insert a Component
-You can insert a component from another place into your code instead of these tasks:
+
+## Inserting Components
+
+Insert components from external files into your code:
+
 ```html
 <define src="path/to/component" name="something"></define>
 <something></something>
 ```
-And these are all the help that CompJS does by adding a few lines of code to your code!
-<br>
-enjoy!
+
+CompJS streamlines your code, making it more readable and maintainable.
+
+## Enjoy the Simplicity
+
+CompJS is designed to simplify your HTML code, making it more modular and expressive. Enjoy a more efficient development experience with CompJS!
