@@ -33,6 +33,7 @@ There are times when we want to insert the html code entered into its tag in a p
       {{html}}
 </define>
 <htmlViewer msg="hello"><h2>Hello World!</h2><button onclick="alert('{{msg=hi}}')">Click Here</button></htmlViewer>
+It will return a h2 and a button tag that when you click on, it alerts "hello"
 ```
 ## Insert a Component
 You can insert a component from another place into your code instead of these tasks:
