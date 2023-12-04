@@ -40,6 +40,10 @@ function applyDefineCode(define, codes) {
             const attrContent = elm.getAttribute(attr.split('=')[0]);
             if (attrContent !== null) {
                 newCodes = newCodes.replaceAll(`{{${attr}}}`, attrContent);
+            } else {
+                if (newCodes.split('=').length === 2){
+                    newCodes = newCodes.replaceAll(`{{${attr}}}`, attr.replace(attr.split('=')[0] + "=", ''));
+                }
             }
         }
         elm.innerHTML = newCodes;
@@ -60,7 +64,7 @@ function observeDocumentChanges() {
         }
     });
 
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, {childList: true, subtree: true});
 }
 
 document.addEventListener('DOMContentLoaded', () => {
