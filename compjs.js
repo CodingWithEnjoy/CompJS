@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    for (let i = 0; i < document.getElementsByTagName('define').length; i++) {
-        let define = document.getElementsByTagName('define')[i];
+    for (const define of document.getElementsByTagName('define')) {
         let elmToSearch;
         if (define.parentElement.nodeName === 'DEFINE') {
-            elmToSearch = document.querySelectorAll(define.parentElement.getAttribute('name') + " " + define.getAttribute('name'));
+            elmToSearch = document.querySelectorAll(`${define.parentElement.getAttribute('name')} ${define.getAttribute('name')}`);
         } else {
             elmToSearch = document.getElementsByTagName(define.getAttribute('name'));
         }
@@ -13,69 +12,41 @@ document.addEventListener('DOMContentLoaded', () => {
             let xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    let codes = this.responseText;
+                    codes = this.responseText;
+                    processDefineCode();
                 }
             };
             xhr.open("GET", define.getAttribute("src"), true);
             xhr.send();
         } else {
             codes = define.innerHTML;
+            processDefineCode();
         }
-        codes = codes.replaceAll(/<define[^>]*>[\s\S]*?<\/define>/gi, '')
-        let attrs = codes.match(/{{([^}]+)}}/g);
-        if (attrs) {
-            attrs = attrs.map(match => match.slice(2, -2));
-        }
-        if (attrs == null) {
-            attrs = [];
-        }
-        for (let j = 0; j < elmToSearch.length; j++) {
-            let css = elmToSearch[j].getAttribute('style');
-            if (css !== "") {
-                css += ";"
-            }
-            elmToSearch[j].setAttribute('style', css + define.getAttribute('style').replace(/var\(\s*--([^)]+)\s*\)/g, (match, varName) => {
-                const attributeValue = elmToSearch[j].getAttribute(varName);
-                return attributeValue ? attributeValue : match;
-            }).replace('display: none;', ''))
-
-            let newCodes = codes;
-            newCodes = newCodes.replace('{{html}}', elmToSearch[j].innerHTML)
-            for (let k = 0; k < attrs.length; k++) {
-                let attrContent = elmToSearch[j].getAttribute(attrs[k].split('=')[0]);
-                if (attrContent !== null) {
-                    newCodes = newCodes.replaceAll('{{' + attrs[k] + '}}', attrContent);
-                }
-            }
-            elmToSearch[j].innerHTML = newCodes;
-        }
-    }
-    for (let i = 0; i < document.getElementsByTagName('define').length; i++) {
-        let define = document.getElementsByTagName('define')[i];
-        if (define.parentElement.nodeName !== 'DEFINE') {
-            let elmToSearch = document.querySelectorAll(define.getAttribute('name'));
-            for (let j = 0; j < elmToSearch.length; j++) {
-                let attrs = elmToSearch[j].innerHTML.match(/{{([^}]+)}}/g);
-                if (attrs) {
-                    attrs = attrs.map(match => match.slice(2, -2));
-                }
-                if (attrs == null) {
-                    attrs = [];
-                }
-                let newCodes = elmToSearch[j].innerHTML;
-                for (let k = 0; k < attrs.length; k++) {
-                    let attrContent = elmToSearch[j].getAttribute(attrs[k].split('=')[0]);
+        function processDefineCode() {
+            codes = codes.replaceAll(/<define[^>]*>[\s\S]*?<\/define>/gi, '');
+            let attrs = codes.match(/{{([^}]+)}}/g);
+            attrs = attrs ? attrs.map(match => match.slice(2, -2)) : [];
+            for (const elm of elmToSearch) {
+                let css = elm.getAttribute('style') || "";
+                css += css ? ";" : "";
+                elm.setAttribute('style', `${css}${define.getAttribute('style')
+                    .replace(/var\(\s*--([^)]+)\s*\)/g, (match, varName) => {
+                        const attributeValue = elm.getAttribute(varName);
+                        return attributeValue ? attributeValue : match;
+                    })
+                    .replace('display: none;', '')}`);
+                let newCodes = codes.replace('{{html}}', elm.innerHTML);
+                for (const attr of attrs) {
+                    const attrContent = elm.getAttribute(attr.split('=')[0]);
                     if (attrContent !== null) {
-                        newCodes = newCodes.replaceAll('{{' + attrs[k] + '}}', attrContent);
-                    } else {
-                        newCodes = newCodes.replaceAll('{{' + attrs[k] + '}}', attrs[k].split('=').slice(1).join('='));
+                        newCodes = newCodes.replaceAll(`{{${attr}}}`, attrContent);
                     }
                 }
-                elmToSearch[j].innerHTML = newCodes;
+                elm.innerHTML = newCodes;
             }
         }
     }
-    for (let i = 0; i < document.getElementsByTagName('define').length; i++) {
-        document.getElementsByTagName('define')[i].remove();
+    for (const define of document.getElementsByTagName('define')) {
+        define.remove();
     }
-}, false)
+}, false);
