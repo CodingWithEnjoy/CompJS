@@ -41,7 +41,7 @@ function applyDefineCode(define, codes) {
             if (attrContent !== null) {
                 newCodes = newCodes.replaceAll(`{{${attr}}}`, attrContent);
             } else {
-                if (newCodes.split('=').length === 2){
+                if (attr.split('=').length === 2){
                     newCodes = newCodes.replaceAll(`{{${attr}}}`, attr.replace(attr.split('=')[0] + "=", ''));
                 }
             }
