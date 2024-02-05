@@ -9,7 +9,7 @@ CompJS is a small JavaScript library designed to enhance HTML code organization 
 To integrate CompJS into your project, add the following script tag at the end of your HTML file:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/idkvarg/compjs@main/comp.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/irdeako/compjs@main/comp.js"></script>
 ```
 
 With this setup, you can leverage the power of components to make your HTML code more modular and maintainable.
