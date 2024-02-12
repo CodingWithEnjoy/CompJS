@@ -7,6 +7,18 @@ function processDefineCode(define) {
             if (this.readyState == 4 && this.status == 200) {
                 codes = this.responseText;
                 applyDefineCode(define, codes);
+                const observer = new MutationObserver((mutationsList) => {
+                    for (const mutation of mutationsList) {
+                        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                            for (const addedNode of mutation.addedNodes) {
+                                if (addedNode.nodeType === 1 && addedNode.tagName.toLowerCase() === define.getAttribute("name")) {
+                                    applyDefineCode(define,codes);
+                                }
+                            }
+                        }
+                    }
+                });
+                observer.observe(document.body, {childList: true, subtree: true});
             }
         };
         xhr.open("GET", define.getAttribute("src"), true);
@@ -14,6 +26,18 @@ function processDefineCode(define) {
     } else {
         codes = define.innerHTML;
         applyDefineCode(define, codes);
+        const observer = new MutationObserver((mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                    for (const addedNode of mutation.addedNodes) {
+                        if (addedNode.nodeType === 1 && addedNode.tagName.toLowerCase() === define.getAttribute("name")) {
+                            applyDefineCode(define,codes);
+                        }
+                    }
+                }
+            }
+        });
+        observer.observe(document.body, {childList: true, subtree: true});
     }
 }
 
@@ -63,7 +87,6 @@ function observeDocumentChanges() {
             }
         }
     });
-
     observer.observe(document.body, {childList: true, subtree: true});
 }
 
@@ -71,6 +94,5 @@ document.addEventListener('DOMContentLoaded', () => {
     observeDocumentChanges();
     for (const define of document.getElementsByTagName('define')) {
         processDefineCode(define);
-        define.remove();
     }
 }, false);
